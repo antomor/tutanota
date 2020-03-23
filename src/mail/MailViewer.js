@@ -467,7 +467,6 @@ export class MailViewer {
 
 		this.onbeforeremove = () => windowFacade.removeResizeListener(resizeListener)
 		this._setupShortcuts()
-		this._checkMailForPhishing(mail)
 	}
 
 	_reportPhishing() {
@@ -487,11 +486,11 @@ export class MailViewer {
 		})
 	}
 
-	_checkMailForPhishing(mail: Mail) {
+	_checkMailForPhishing(mail: Mail, links: Array<string>) {
 		if (mail.phishingStatus === MailPhishingStatus.SUSPICIOUS) {
 			this._suspicious = true
 		} else if (mail.phishingStatus === MailPhishingStatus.UNKNOWN) {
-			mailModel.checkMailForPhishing(mail).then((isSuspicious) => {
+			mailModel.checkMailForPhishing(mail, links).then((isSuspicious) => {
 				if (isSuspicious) {
 					this._suspicious = true
 					mail.phishingStatus = MailPhishingStatus.SUSPICIOUS
@@ -567,6 +566,7 @@ export class MailViewer {
 		return load(MailBodyTypeRef, mail.body).then(body => {
 			this._mailBody = body
 			let sanitizeResult = htmlSanitizer.sanitizeFragment(this._getMailBody(), true, isTutanotaTeamMail(mail))
+			this._checkMailForPhishing(mail, sanitizeResult.links)
 
 			/**
 			 * check if we need to improve contrast for dark theme.

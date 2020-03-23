@@ -549,10 +549,10 @@ export const Keys = Object.freeze({
 export type KeysEnum = $Values<typeof Keys>
 
 export const ReportedMailFieldType = Object.freeze({
-	SENDER_NAME: "0",
-	SENDER_ADDRESS: "1",
+	HEADER_ADDRESS: "0",
+	HEADER_DOMAIN: "1",
 	SUBJECT: "2",
-	TECHNICAL_SENDER_ADDRESS: "3",
+	LINK: "3",
 })
 export type ReportedMailFieldTypeEnum = $Values<typeof ReportedMailFieldType>
 

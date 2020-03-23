@@ -16,6 +16,7 @@ import {MailboxGroupRootTypeRef} from "../api/entities/tutanota/MailboxGroupRoot
 import {GroupInfoTypeRef} from "../api/entities/sys/GroupInfo"
 import {GroupTypeRef} from "../api/entities/sys/Group"
 import {MailFolderTypeRef} from "../api/entities/tutanota/MailFolder"
+import type {ReportedMailFieldTypeEnum} from "../api/common/TutanotaConstants"
 import {FeatureType, GroupType, MailFolderType, OperationType, ReportedMailFieldType} from "../api/common/TutanotaConstants"
 import {module as replaced} from "@hot"
 import {UserTypeRef} from "../api/entities/sys/User"
@@ -272,15 +273,37 @@ export class MailModel {
 		}).catch(() => null)
 	}
 
-	checkMailForPhishing(mail: Mail): Promise<boolean> {
-		const computedMarkers = new Set()
-		// TODO: we shouldn't do this on the main thread
-		computedMarkers.add(ReportedMailFieldType.SENDER_NAME + murmurHash(mail.sender.name))
-		computedMarkers.add(ReportedMailFieldType.SENDER_ADDRESS + murmurHash(mail.sender.address))
-		computedMarkers.add(ReportedMailFieldType.SUBJECT + murmurHash(mail.subject))
+	checkMailForPhishing(mail: Mail, links: Array<string>): Promise<boolean> {
+		// TODO: we shouldn't do this on the main thread?
+
+		let score = 0
+		const senderAddress = mail.sender.address
 		const markers = this._eventController.phishingMarkers()
-		// TODO: improve logic with importance & scoring
-		return Promise.resolve(markers.filter(m => computedMarkers.has(m.marker)).length > 1)
+
+		if (this._checkFieldForPhishing(markers, ReportedMailFieldType.HEADER_ADDRESS, senderAddress)) {
+			// TODO: currently it's set even if it's authenticated
+			score += (mail.differentEnvelopeSender ? 3 : 6)
+		} else {
+			const senderDomain = senderAddress.slice(senderAddress.lastIndexOf("@") + 1)
+			if (this._checkFieldForPhishing(markers, ReportedMailFieldType.HEADER_DOMAIN, senderDomain)) {
+				score += (mail.differentEnvelopeSender ? 3 : 6)
+			}
+		}
+		if (this._checkFieldForPhishing(markers, ReportedMailFieldType.SUBJECT, mail.subject)) {
+			score += 6
+		}
+		for (const link of links) {
+			if (this._checkFieldForPhishing(markers, ReportedMailFieldType.LINK, link)) {
+				score += 6
+				break
+			}
+		}
+		return Promise.resolve(7 < score)
+	}
+
+	_checkFieldForPhishing(markers: Array<PhishingMarker>, type: ReportedMailFieldTypeEnum, value: string): boolean {
+		const hash = type + murmurHash(value)
+		return markers.some(marker => marker.marker === hash)
 	}
 }
 
