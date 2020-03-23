@@ -330,7 +330,7 @@ export class MailViewer {
 					}, () => Icons.Cancel).setType(ButtonType.Dropdown))
 				}
 				moreButtons.push(new Button("showHeaders_action", () => this._showHeaders(), () => Icons.ListUnordered).setType(ButtonType.Dropdown))
-				moreButtons.push(new Button(() => "Report phishing", () => this._reportMailForPhishing(mail), () => Icons.Warning)
+				moreButtons.push(new Button(() => "Report phishing", () => this._reportPhishing(), () => Icons.Warning)
 					.setType(ButtonType.Dropdown))
 				return moreButtons
 			}, 350))
@@ -469,6 +469,23 @@ export class MailViewer {
 		this._checkMailForPhishing(mail)
 	}
 
+	_reportPhishing() {
+		Dialog.confirm("phisingReport_msg").then((confirmed) => {
+			if (confirmed) {
+				worker.resolveSessionKey(MailTypeModel, this.mail)
+				      .then((mailSessionKeyB64) => {
+					      const postData = createReportPhishingPostData({
+						      mailData: createReportedMailData({
+							      mailId: this.mail._id,
+							      mailSessionKey: base64ToUint8Array(neverNull(mailSessionKeyB64)),
+						      })
+					      })
+					      serviceRequestVoid(TutanotaService.ReportPhishingService, HttpMethod.POST, postData)
+				      })
+			}
+		})
+	}
+
 	_checkMailForPhishing(mail: Mail) {
 		mailModel.checkMailForPhishing(mail).then((isSuspicious) => {
 			if (isSuspicious) {
@@ -476,23 +493,6 @@ export class MailViewer {
 				m.redraw()
 			}
 		})
-	}
-
-	_reportMailForPhishing(mail: Mail) {
-		worker.resolveSessionKey(MailTypeModel, mail)
-		      .then((mailSessionKeyB64) => {
-			      const postData = createReportPhishingPostData({
-				      mailData: createReportedMailData({
-					      mailId: mail._id,
-					      mailSessionKey: base64ToUint8Array(neverNull(mailSessionKeyB64)),
-				      })
-			      })
-			      serviceRequestVoid(TutanotaService.ReportPhishingService, HttpMethod.POST, postData)
-		      })
-		      .then(() => {
-			      console.log("reported, subject:", mail.subject)
-		      })
-
 	}
 
 	getBounds(): ?PosRect {
