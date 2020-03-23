@@ -173,6 +173,7 @@ type Mail = {
 	differentEnvelopeSender: ?string;
 	listUnsubscribe: boolean;
 	movedTime: ?Date;
+	phishingStatus: NumberString;
 	receivedDate: Date;
 	replyType: NumberString;
 	sentDate: Date;

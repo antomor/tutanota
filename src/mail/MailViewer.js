@@ -21,6 +21,7 @@ import {
 	InboxRuleType,
 	Keys,
 	MailFolderType,
+	MailPhishingStatus,
 	MailState,
 	SpamRuleFieldType as SparmRuleType,
 	SpamRuleType
@@ -487,12 +488,18 @@ export class MailViewer {
 	}
 
 	_checkMailForPhishing(mail: Mail) {
-		mailModel.checkMailForPhishing(mail).then((isSuspicious) => {
-			if (isSuspicious) {
-				this._suspicious = true
-				m.redraw()
-			}
-		})
+		if (mail.phishingStatus === MailPhishingStatus.SUSPICIOUS) {
+			this._suspicious = true
+		} else if (mail.phishingStatus === MailPhishingStatus.UNKNOWN) {
+			mailModel.checkMailForPhishing(mail).then((isSuspicious) => {
+				if (isSuspicious) {
+					this._suspicious = true
+					mail.phishingStatus = MailPhishingStatus.SUSPICIOUS
+					update(mail)
+					m.redraw()
+				}
+			})
+		}
 	}
 
 	getBounds(): ?PosRect {

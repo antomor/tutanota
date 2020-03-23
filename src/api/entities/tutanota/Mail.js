@@ -111,6 +111,15 @@ export const _TypeModel: TypeModel = {
 			"final": true,
 			"encrypted": false
 		},
+		"phishingStatus": {
+			"name": "phishingStatus",
+			"id": 1059,
+			"since": 40,
+			"type": "Number",
+			"cardinality": "One",
+			"final": false,
+			"encrypted": false
+		},
 		"receivedDate": {
 			"name": "receivedDate",
 			"id": 107,

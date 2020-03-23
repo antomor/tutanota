@@ -555,3 +555,10 @@ export const ReportedMailFieldType = Object.freeze({
 	TECHNICAL_SENDER_ADDRESS: "3",
 })
 export type ReportedMailFieldTypeEnum = $Values<typeof ReportedMailFieldType>
+
+export const MailPhishingStatus = Object.freeze({
+	UNKNOWN: "0",
+	SUSPICIOUS: "1",
+	WHITELISTED: "2",
+})
+export type MailPhishingStatusEnum = $Values<typeof MailPhishingStatus>
