@@ -146,6 +146,7 @@ type MainRequestType = 'execNative'
 	| 'updateWebSocketState'
 	| 'counterUpdate'
 	| 'infoMessage'
+	| 'phishingMarkers'
 
 type NativeRequestType = 'init'
 	| 'generateRsaKey'

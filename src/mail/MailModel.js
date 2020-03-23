@@ -3,7 +3,7 @@ import m from "mithril"
 import stream from "mithril/stream/stream.js"
 import {containsEventOfType, neverNull, noOp} from "../api/common/utils/Utils"
 import {createMoveMailData} from "../api/entities/tutanota/MoveMailData"
-import {load, loadAll, serviceRequest, serviceRequestVoid} from "../api/main/Entity"
+import {load, loadAll, serviceRequestVoid} from "../api/main/Entity"
 import {TutanotaService} from "../api/entities/tutanota/Services"
 import {elementIdPart, getListId, HttpMethod, isSameId, listIdPart} from "../api/common/EntityFunctions"
 import {PreconditionFailedError} from "../api/common/error/RestError"
@@ -29,7 +29,6 @@ import {ProgrammingError} from "../api/common/error/ProgrammingError"
 import {findAndApplyMatchingRule} from "./InboxRuleHandler"
 import {getFromMap} from "../api/common/utils/MapUtils"
 import murmurHash from "../api/worker/crypto/lib/murmurhash3_32"
-import {ReportPhishingGetReturnTypeRef} from "../api/entities/tutanota/ReportPhishingGetReturn"
 
 export type MailboxDetail = {
 	mailbox: MailBox,
@@ -53,7 +52,6 @@ export class MailModel {
 	_initialization: ?Promise<void>
 	_notifications: Notifications
 	_eventController: EventController
-	_phishingMarkers: ?Array<ReportFieldMarker>
 
 	constructor(notifications: Notifications, eventController: EventController) {
 		this.mailboxDetails = stream()
@@ -280,16 +278,9 @@ export class MailModel {
 		computedMarkers.add(ReportedMailFieldType.SENDER_NAME + murmurHash(mail.sender.name))
 		computedMarkers.add(ReportedMailFieldType.SENDER_ADDRESS + murmurHash(mail.sender.address))
 		computedMarkers.add(ReportedMailFieldType.SUBJECT + murmurHash(mail.subject))
-		const markers = this._phishingMarkers
-			|| serviceRequest(TutanotaService.ReportPhishingService, HttpMethod.GET, null, ReportPhishingGetReturnTypeRef)
-				.then(({markers}) => {
-					this._phishingMarkers = markers
-					return markers
-				})
-		return Promise.resolve(markers)
-		              .then((markers) => {
-			              return markers.filter(m => computedMarkers.has(m.marker)).length > 1
-		              })
+		const markers = this._eventController.phishingMarkers()
+		// TODO: improve logic with importance & scoring
+		return Promise.resolve(markers.filter(m => computedMarkers.has(m.marker)).length > 1)
 	}
 }
 

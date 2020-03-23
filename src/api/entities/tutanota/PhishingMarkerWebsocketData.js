@@ -2,19 +2,19 @@
 
 import {create, TypeRef} from "../../common/EntityFunctions"
 
-export const ReportPhishingGetReturnTypeRef: TypeRef<ReportPhishingGetReturn> = new TypeRef("tutanota", "ReportPhishingGetReturn")
+export const PhishingMarkerWebsocketDataTypeRef: TypeRef<PhishingMarkerWebsocketData> = new TypeRef("tutanota", "PhishingMarkerWebsocketData")
 export const _TypeModel: TypeModel = {
-	"name": "ReportPhishingGetReturn",
+	"name": "PhishingMarkerWebsocketData",
 	"since": 40,
 	"type": "DATA_TRANSFER_TYPE",
-	"id": 1040,
-	"rootId": "CHR1dGFub3RhAAQQ",
+	"id": 1031,
+	"rootId": "CHR1dGFub3RhAAQH",
 	"versioned": false,
 	"encrypted": false,
 	"values": {
 		"_format": {
 			"name": "_format",
-			"id": 1041,
+			"id": 1032,
 			"since": 40,
 			"type": "Number",
 			"cardinality": "One",
@@ -25,11 +25,11 @@ export const _TypeModel: TypeModel = {
 	"associations": {
 		"markers": {
 			"name": "markers",
-			"id": 1042,
+			"id": 1033,
 			"since": 40,
 			"type": "AGGREGATION",
 			"cardinality": "Any",
-			"refType": "ReportFieldMarker",
+			"refType": "PhishingMarker",
 			"final": false
 		}
 	},
@@ -37,6 +37,6 @@ export const _TypeModel: TypeModel = {
 	"version": "40"
 }
 
-export function createReportPhishingGetReturn(values?: $Shape<$Exact<ReportPhishingGetReturn>>): ReportPhishingGetReturn {
-	return Object.assign(create(_TypeModel, ReportPhishingGetReturnTypeRef), values)
+export function createPhishingMarkerWebsocketData(values?: $Shape<$Exact<PhishingMarkerWebsocketData>>): PhishingMarkerWebsocketData {
+	return Object.assign(create(_TypeModel, PhishingMarkerWebsocketDataTypeRef), values)
 }

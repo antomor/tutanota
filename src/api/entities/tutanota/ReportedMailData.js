@@ -7,14 +7,14 @@ export const _TypeModel: TypeModel = {
 	"name": "ReportedMailData",
 	"since": 40,
 	"type": "AGGREGATED_TYPE",
-	"id": 1030,
-	"rootId": "CHR1dGFub3RhAAQG",
+	"id": 1045,
+	"rootId": "CHR1dGFub3RhAAQV",
 	"versioned": false,
 	"encrypted": false,
 	"values": {
 		"_id": {
 			"name": "_id",
-			"id": 1031,
+			"id": 1046,
 			"since": 40,
 			"type": "CustomId",
 			"cardinality": "One",
@@ -23,7 +23,7 @@ export const _TypeModel: TypeModel = {
 		},
 		"mailSessionKey": {
 			"name": "mailSessionKey",
-			"id": 1033,
+			"id": 1048,
 			"since": 40,
 			"type": "Bytes",
 			"cardinality": "One",
@@ -34,7 +34,7 @@ export const _TypeModel: TypeModel = {
 	"associations": {
 		"mailId": {
 			"name": "mailId",
-			"id": 1032,
+			"id": 1047,
 			"since": 40,
 			"type": "LIST_ELEMENT_ASSOCIATION",
 			"cardinality": "One",

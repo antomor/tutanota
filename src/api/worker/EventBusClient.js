@@ -14,7 +14,8 @@ import {
 	handleRestError,
 	NotAuthorizedError,
 	NotFoundError,
-	ServiceUnavailableError, SessionExpiredError
+	ServiceUnavailableError,
+	SessionExpiredError
 } from "../common/error/RestError"
 import {EntityEventBatchTypeRef} from "../entities/sys/EntityEventBatch"
 import {downcast, identity, neverNull, randomIntFromInterval} from "../common/utils/Utils"
@@ -25,6 +26,7 @@ import type {CloseEventBusOptionEnum} from "../common/TutanotaConstants"
 import {CloseEventBusOption, GroupType, SECOND_MS} from "../common/TutanotaConstants"
 import {_TypeModel as WebsocketEntityDataTypeModel} from "../entities/sys/WebsocketEntityData"
 import {CancelledError} from "../common/error/CancelledError"
+import {_TypeModel as PhishingMarkerWebsocketDataTypeModel} from "../entities/tutanota/PhishingMarkerWebsocketData"
 
 assertWorkerOrNode()
 
@@ -242,6 +244,13 @@ export class EventBusClient {
 				})
 		} else if (type === "unreadCounterUpdate") {
 			this._worker.updateCounter(JSON.parse(value))
+		} else if (type === "phishingMarkers") {
+			return decryptAndMapToInstance(PhishingMarkerWebsocketDataTypeModel, JSON.parse(value), null)
+				.then((data) => {
+					this._worker.phishingMarkers(data)
+				})
+		} else {
+			console.log("ws message with unknown type", type)
 		}
 		return Promise.resolve()
 	}

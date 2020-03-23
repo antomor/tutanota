@@ -1139,6 +1139,20 @@ type GroupInvitationDeleteData = {
 	receivedInvitation: IdTuple;
 }
 
+type PhishingMarker = {
+	_type: TypeRef<PhishingMarker>;
+	_id: Id;
+	marker: string;
+
+}
+
+type PhishingMarkerWebsocketData = {
+	_type: TypeRef<PhishingMarkerWebsocketData>;
+	_format: NumberString;
+
+	markers: PhishingMarker[];
+}
+
 type ReportedMailData = {
 	_type: TypeRef<ReportedMailData>;
 	_id: Id;
@@ -1152,19 +1166,5 @@ type ReportPhishingPostData = {
 	_format: NumberString;
 
 	mailData: ReportedMailData;
-}
-
-type ReportFieldMarker = {
-	_type: TypeRef<ReportFieldMarker>;
-	_id: Id;
-	marker: string;
-
-}
-
-type ReportPhishingGetReturn = {
-	_type: TypeRef<ReportPhishingGetReturn>;
-	_format: NumberString;
-
-	markers: ReportFieldMarker[];
 }
 

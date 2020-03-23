@@ -89,7 +89,11 @@ export class WorkerClient {
 			infoMessage: (message: Message) => {
 				this.infoMessages(downcast(message.args[0]))
 				return Promise.resolve()
-			}
+			},
+			phishingMarkers: (message: Message) => {
+				locator.eventController.phishingMarkersUpdateReceived(downcast(message.args[0]))
+				return Promise.resolve()
+			},
 		})
 	}
 

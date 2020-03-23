@@ -2,19 +2,19 @@
 
 import {create, TypeRef} from "../../common/EntityFunctions"
 
-export const ReportFieldMarkerTypeRef: TypeRef<ReportFieldMarker> = new TypeRef("tutanota", "ReportFieldMarker")
+export const PhishingMarkerTypeRef: TypeRef<PhishingMarker> = new TypeRef("tutanota", "PhishingMarker")
 export const _TypeModel: TypeModel = {
-	"name": "ReportFieldMarker",
+	"name": "PhishingMarker",
 	"since": 40,
 	"type": "AGGREGATED_TYPE",
-	"id": 1037,
-	"rootId": "CHR1dGFub3RhAAQN",
+	"id": 1021,
+	"rootId": "CHR1dGFub3RhAAP9",
 	"versioned": false,
 	"encrypted": false,
 	"values": {
 		"_id": {
 			"name": "_id",
-			"id": 1038,
+			"id": 1022,
 			"since": 40,
 			"type": "CustomId",
 			"cardinality": "One",
@@ -23,7 +23,7 @@ export const _TypeModel: TypeModel = {
 		},
 		"marker": {
 			"name": "marker",
-			"id": 1039,
+			"id": 1023,
 			"since": 40,
 			"type": "String",
 			"cardinality": "One",
@@ -36,6 +36,6 @@ export const _TypeModel: TypeModel = {
 	"version": "40"
 }
 
-export function createReportFieldMarker(values?: $Shape<$Exact<ReportFieldMarker>>): ReportFieldMarker {
-	return Object.assign(create(_TypeModel, ReportFieldMarkerTypeRef), values)
+export function createPhishingMarker(values?: $Shape<$Exact<PhishingMarker>>): PhishingMarker {
+	return Object.assign(create(_TypeModel, PhishingMarkerTypeRef), values)
 }
