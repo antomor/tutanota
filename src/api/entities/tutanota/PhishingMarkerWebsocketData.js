@@ -20,12 +20,21 @@ export const _TypeModel: TypeModel = {
 			"cardinality": "One",
 			"final": false,
 			"encrypted": false
+		},
+		"lastId": {
+			"name": "lastId",
+			"id": 1033,
+			"since": 40,
+			"type": "GeneratedId",
+			"cardinality": "One",
+			"final": false,
+			"encrypted": false
 		}
 	},
 	"associations": {
 		"markers": {
 			"name": "markers",
-			"id": 1033,
+			"id": 1034,
 			"since": 40,
 			"type": "AGGREGATION",
 			"cardinality": "Any",

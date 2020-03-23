@@ -1149,6 +1149,7 @@ type PhishingMarker = {
 type PhishingMarkerWebsocketData = {
 	_type: TypeRef<PhishingMarkerWebsocketData>;
 	_format: NumberString;
+	lastId: Id;
 
 	markers: PhishingMarker[];
 }
