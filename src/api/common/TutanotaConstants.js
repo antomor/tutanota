@@ -3,7 +3,7 @@
 import {downcast} from "./utils/Utils"
 
 export const reverse = (objectMap: Object) => Object.keys(objectMap)
-                                                    .reduce((r, k) => Object.assign(r, {[objectMap[k]]: k}), {})
+                                                    .reduce((r, k) => Object.assign(r, {[objectMap[k]]: k}), ({}: {[string]: string}))
 
 export const GroupType = Object.freeze({
 	User: "0",

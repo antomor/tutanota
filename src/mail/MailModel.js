@@ -9,7 +9,7 @@ import {elementIdPart, getListId, HttpMethod, isSameId, listIdPart} from "../api
 import {PreconditionFailedError} from "../api/common/error/RestError"
 import {Dialog} from "../gui/base/Dialog"
 import {logins} from "../api/main/LoginController"
-import {getTrashFolder, isFinalDelete} from "./MailUtils"
+import {addressDomain, getTrashFolder, isFinalDelete, phishingMarkerValue} from "./MailUtils"
 import {createDeleteMailData} from "../api/entities/tutanota/DeleteMailData"
 import {MailBoxTypeRef} from "../api/entities/tutanota/MailBox"
 import {MailboxGroupRootTypeRef} from "../api/entities/tutanota/MailboxGroupRoot"
@@ -284,7 +284,7 @@ export class MailModel {
 			// TODO: currently it's set even if it's authenticated
 			score += (mail.differentEnvelopeSender ? 3 : 6)
 		} else {
-			const senderDomain = senderAddress.slice(senderAddress.lastIndexOf("@") + 1)
+			const senderDomain = addressDomain(senderAddress)
 			if (this._checkFieldForPhishing(markers, ReportedMailFieldType.HEADER_DOMAIN, senderDomain)) {
 				score += (mail.differentEnvelopeSender ? 3 : 6)
 			}
@@ -302,7 +302,7 @@ export class MailModel {
 	}
 
 	_checkFieldForPhishing(markers: Array<PhishingMarker>, type: ReportedMailFieldTypeEnum, value: string): boolean {
-		const hash = type + murmurHash(value)
+		const hash = phishingMarkerValue(type, value)
 		return markers.some(marker => marker.marker === hash)
 	}
 }
