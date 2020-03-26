@@ -97,7 +97,6 @@ import {navButtonRoutes} from "../misc/RouteChange"
 import {createEmailSenderListElement} from "../api/entities/sys/EmailSenderListElement"
 import {isNewMailActionAvailable} from "./MailView"
 import {createReportPhishingPostData} from "../api/entities/tutanota/ReportPhishingPostData"
-import {createReportedMailData} from "../api/entities/tutanota/ReportedMailData"
 import {_TypeModel as MailTypeModel} from "../api/entities/tutanota/Mail"
 import {base64ToUint8Array} from "../api/common/utils/Encoding"
 import {MessageBoxN} from "../gui/base/MessageBoxN"
@@ -475,10 +474,8 @@ export class MailViewer {
 				worker.resolveSessionKey(MailTypeModel, this.mail)
 				      .then((mailSessionKeyB64) => {
 					      const postData = createReportPhishingPostData({
-						      mailData: createReportedMailData({
-							      mailId: this.mail._id,
-							      mailSessionKey: base64ToUint8Array(neverNull(mailSessionKeyB64)),
-						      })
+						      mailId: this.mail._id,
+						      mailSessionKey: base64ToUint8Array(neverNull(mailSessionKeyB64)),
 					      })
 					      serviceRequestVoid(TutanotaService.ReportPhishingService, HttpMethod.POST, postData)
 				      })

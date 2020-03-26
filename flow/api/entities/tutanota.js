@@ -1155,18 +1155,11 @@ type PhishingMarkerWebsocketData = {
 	markers: PhishingMarker[];
 }
 
-type ReportedMailData = {
-	_type: TypeRef<ReportedMailData>;
-	_id: Id;
-	mailSessionKey: Uint8Array;
-
-	mailId: IdTuple;
-}
-
 type ReportPhishingPostData = {
 	_type: TypeRef<ReportPhishingPostData>;
 	_format: NumberString;
+	mailSessionKey: Uint8Array;
 
-	mailData: ReportedMailData;
+	mailId: IdTuple;
 }
 

@@ -7,14 +7,14 @@ export const _TypeModel: TypeModel = {
 	"name": "PhishingMarkerWebsocketData",
 	"since": 40,
 	"type": "DATA_TRANSFER_TYPE",
-	"id": 1031,
-	"rootId": "CHR1dGFub3RhAAQH",
+	"id": 1032,
+	"rootId": "CHR1dGFub3RhAAQI",
 	"versioned": false,
 	"encrypted": false,
 	"values": {
 		"_format": {
 			"name": "_format",
-			"id": 1032,
+			"id": 1033,
 			"since": 40,
 			"type": "Number",
 			"cardinality": "One",
@@ -23,7 +23,7 @@ export const _TypeModel: TypeModel = {
 		},
 		"lastId": {
 			"name": "lastId",
-			"id": 1033,
+			"id": 1034,
 			"since": 40,
 			"type": "GeneratedId",
 			"cardinality": "One",
@@ -34,7 +34,7 @@ export const _TypeModel: TypeModel = {
 	"associations": {
 		"markers": {
 			"name": "markers",
-			"id": 1034,
+			"id": 1035,
 			"since": 40,
 			"type": "AGGREGATION",
 			"cardinality": "Any",

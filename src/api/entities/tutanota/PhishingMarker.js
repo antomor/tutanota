@@ -7,14 +7,14 @@ export const _TypeModel: TypeModel = {
 	"name": "PhishingMarker",
 	"since": 40,
 	"type": "AGGREGATED_TYPE",
-	"id": 1021,
-	"rootId": "CHR1dGFub3RhAAP9",
+	"id": 1022,
+	"rootId": "CHR1dGFub3RhAAP-",
 	"versioned": false,
 	"encrypted": false,
 	"values": {
 		"_id": {
 			"name": "_id",
-			"id": 1022,
+			"id": 1023,
 			"since": 40,
 			"type": "CustomId",
 			"cardinality": "One",
@@ -23,7 +23,7 @@ export const _TypeModel: TypeModel = {
 		},
 		"marker": {
 			"name": "marker",
-			"id": 1023,
+			"id": 1024,
 			"since": 40,
 			"type": "String",
 			"cardinality": "One",

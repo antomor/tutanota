@@ -7,30 +7,40 @@ export const _TypeModel: TypeModel = {
 	"name": "ReportPhishingPostData",
 	"since": 40,
 	"type": "DATA_TRANSFER_TYPE",
-	"id": 1050,
-	"rootId": "CHR1dGFub3RhAAQa",
+	"id": 1063,
+	"rootId": "CHR1dGFub3RhAAQn",
 	"versioned": false,
 	"encrypted": false,
 	"values": {
 		"_format": {
 			"name": "_format",
-			"id": 1051,
+			"id": 1064,
 			"since": 40,
 			"type": "Number",
+			"cardinality": "One",
+			"final": false,
+			"encrypted": false
+		},
+		"mailSessionKey": {
+			"name": "mailSessionKey",
+			"id": 1065,
+			"since": 40,
+			"type": "Bytes",
 			"cardinality": "One",
 			"final": false,
 			"encrypted": false
 		}
 	},
 	"associations": {
-		"mailData": {
-			"name": "mailData",
-			"id": 1052,
+		"mailId": {
+			"name": "mailId",
+			"id": 1066,
 			"since": 40,
-			"type": "AGGREGATION",
+			"type": "LIST_ELEMENT_ASSOCIATION",
 			"cardinality": "One",
-			"refType": "ReportedMailData",
-			"final": false
+			"refType": "Mail",
+			"final": false,
+			"external": false
 		}
 	},
 	"app": "tutanota",

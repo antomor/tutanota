@@ -113,7 +113,7 @@ export const _TypeModel: TypeModel = {
 		},
 		"phishingStatus": {
 			"name": "phishingStatus",
-			"id": 1061,
+			"id": 1021,
 			"since": 40,
 			"type": "Number",
 			"cardinality": "One",
