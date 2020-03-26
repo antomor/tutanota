@@ -93,6 +93,13 @@ o.spec("ElectronUpdater Test", function (done, timeout) {
 		}
 	}
 
+	const fs = {
+		accessSync: () => {},
+		constants: {
+			"R_OK": 1
+		}
+	}
+
 	const lang = {
 		lang: {
 			get: (key: string) => {
@@ -137,6 +144,7 @@ o.spec("ElectronUpdater Test", function (done, timeout) {
 
 	o("update is available", done => {
 		//mock node modules
+		const fsMock = n.mock('fs-extra', fs).set()
 		const forgeMock = n.mock('node-forge', nodeForge).set()
 		const autoUpdaterMock = n.mock('electron-updater', autoUpdater).set().autoUpdater
 		const electronMock = n.mock('electron', electron).set()
@@ -196,6 +204,7 @@ o.spec("ElectronUpdater Test", function (done, timeout) {
 
 	o("update is not available", done => {
 		//mock node modules
+		const fsMock = n.mock('fs-extra', fs).set()
 		const forgeMock = n.mock('node-forge', nodeForge).set()
 		const electronMock = n.mock('electron', electron).set()
 		const autoUpdaterMock = n.mock('electron-updater', autoUpdater)
@@ -237,6 +246,7 @@ o.spec("ElectronUpdater Test", function (done, timeout) {
 
 	o("enable autoUpdate while running", done => {
 		//mock node modules
+		const fsMock = n.mock('fs-extra', fs).set()
 		const forgeMock = n.mock('node-forge', nodeForge).set()
 		const electronMock = n.mock('electron', electron).set()
 		const autoUpdaterMock = n.mock('electron-updater', autoUpdater).set().autoUpdater
@@ -312,6 +322,7 @@ o.spec("ElectronUpdater Test", function (done, timeout) {
 
 	o("retry after autoUpdater reports an error", done => {
 		//mock node modules
+		const fsMock = n.mock('fs-extra', fs).set()
 		const forgeMock = n.mock('node-forge', nodeForge).set()
 		const electronMock = n.mock('electron', electron).set()
 		const autoUpdaterMock = n.mock('electron-updater', autoUpdater)
@@ -383,6 +394,7 @@ o.spec("ElectronUpdater Test", function (done, timeout) {
 		const MAX_NUM_ERRORS = 5
 		let threw = false
 		//mock node modules
+		const fsMock = n.mock('fs-extra', fs).set()
 		const forgeMock = n.mock('node-forge', nodeForge).set()
 		const electronMock = n.mock('electron', electron).set()
 		const autoUpdaterMock = n.mock('electron-updater', autoUpdater)
@@ -427,6 +439,7 @@ o.spec("ElectronUpdater Test", function (done, timeout) {
 	o("works if second key is right one", done => {
 
 		//mock node modules
+		const fsMock = n.mock('fs-extra', fs).set()
 		const forgeMock = n.mock('node-forge', nodeForge).with({
 			publicKeyFromPem: (pem: string) => n.spyify(pem === "no" ? rightKey : wrongKey)
 		}).set()
@@ -487,4 +500,33 @@ o.spec("ElectronUpdater Test", function (done, timeout) {
 			done()
 		}, 190)
 	})
+
+	o("updater disables itself if accessSync throws", function () {
+			//mock node modules
+			const fsMock = n.mock('fs-extra', fs).with({
+				accessSync: undefined
+			}).set()
+			const forgeMock = n.mock('node-forge', nodeForge).set()
+			const autoUpdaterMock = n.mock('electron-updater', autoUpdater).set().autoUpdater
+			const electronMock = n.mock('electron', electron).set()
+
+			//mock our modules
+			n.mock('./tray/DesktopTray', desktopTray).set()
+			n.mock('../misc/LanguageViewModel', lang).set()
+
+			//mock instances
+			const confMock = n.mock('__conf', conf).set()
+			const notifierMock = n.mock('__notifier', notifier).set()
+
+			const {ElectronUpdater} = n.subject('../../src/desktop/ElectronUpdater.js')
+			const upd = new ElectronUpdater(confMock, notifierMock)
+
+			o(autoUpdaterMock.on.callCount).equals(5)
+			o(autoUpdaterMock.logger).equals(null)
+
+			upd.start()
+
+			o(confMock.removeListener.callCount).equals(0)
+		}
+	)
 })
